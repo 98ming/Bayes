@@ -13,8 +13,8 @@ public class Bayes {
 	public String predictClass(ArrayList<ArrayList<String >> trainList,ArrayList<String> testList){
 		Map<String, ArrayList<ArrayList<String>>> resultMap = dataSet(trainList);
 		double mMax = 0.0;
-		
-		 String finalResult  = "";
+
+		String finalResult  = "";
 		for(int i = 0;i < resultMap.size();i++){
 			double mCurrent = 0.0;
 			String key = "";
@@ -26,9 +26,9 @@ public class Bayes {
 			ArrayList<ArrayList<String>> temp = resultMap.get(key);
 			mCurrent = culCofV(temp.size(),trainList.size());
 			for(int j = 0;j < testList.size();j++){
-				 
+
 				double pv = culPofV(temp,testList.get(j),j);
-				mCurrent = DecimalCalculate.mul(mCurrent, pv); 
+				mCurrent = DecimalCalculate.mul(mCurrent, pv);
 			}
 			if(mMax <= mCurrent){
 				if(i == 0){
@@ -39,11 +39,11 @@ public class Bayes {
 				mMax = mCurrent;
 			}
 		}
-		
+
 		return finalResult;
 	}
 	/**
-	 * ¼ÆËã×Ü¸ÅÂÊP(y)
+	 * è®¡ç®—æ€»æ¦‚ç‡P(y)
 	 * @param ySize
 	 * @param nSize
 	 * @return
@@ -52,7 +52,7 @@ public class Bayes {
 		return DecimalCalculate.div(ySize, nSize);
 	}
 	/**
-	 * ·ÖÀà
+	 * åˆ†ç±»
 	 * @param list
 	 * @return
 	 */
@@ -63,19 +63,19 @@ public class Bayes {
 		for(int i = 0;i < list.size();i++){
 			ArrayList<String> temp = new ArrayList<String>();
 			temp = list.get(i);
-		String mResult = temp.get(temp.size()-1);//»ñÈ¡×îºóÒ»Ïî
-		if(mResult.equals("yes")){
-			mIsList.add(temp);
-		}else{
-			mNoList.add(temp);
-		}
+			String mResult = temp.get(temp.size()-1);//è·å–æœ€åä¸€é¡¹
+			if(mResult.equals("yes")){
+				mIsList.add(temp);
+			}else{
+				mNoList.add(temp);
+			}
 		}
 		culMap.put("yes", mIsList);
 		culMap.put("no", mNoList);
 		return culMap;
 	}
 	/**
-	 * ¼ÆËã×Ü¸ÅÂÊ
+	 * è®¡ç®—æ€»æ¦‚ç‡
 	 */
 	public double culPofV(ArrayList<ArrayList<String>> mList,String mStr,int index){
 		int count = 0;

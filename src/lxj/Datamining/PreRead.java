@@ -16,96 +16,100 @@ import javax.sound.sampled.Line;
 public class PreRead {
 
 	/**
-	 * ¶ÁÈ¡²âÊÔÎÄµµ
+	 * è¯»å–æµ‹è¯•æ–‡æ¡£
 	 */
-	 public ArrayList<ArrayList<String>> readTest(String fileIn){
-		 ArrayList<ArrayList<String>> outList = new ArrayList<ArrayList<String>>();
-		 try {
+	public ArrayList<ArrayList<String>> readTest(String fileIn){
+		ArrayList<ArrayList<String>> outList = new ArrayList<ArrayList<String>>();
+		try {
 			File file = new File(fileIn);
-			 FileReader reader = new FileReader(file);
-			 BufferedReader in = new BufferedReader(reader);
-			 String line = null;
-			 while((line = in.readLine()) != null){
-				 ArrayList<String> list = new ArrayList<String> ();
-				 String[] mArray = line.split(",");
-				 for(int i = 0;i < mArray.length;i++){
-					 list.add(mArray[i]);
-				 }
-				 outList.add(list);
-			 }
-			 in.close();
-			 reader.close();
+			FileReader reader = new FileReader(file);
+			BufferedReader in = new BufferedReader(reader);
+			String line = null;
+			while((line = in.readLine()) != null){
+				ArrayList<String> list = new ArrayList<String> ();
+				String[] mArray = line.split(",");
+				for(int i = 0;i < mArray.length;i++){
+					list.add(mArray[i]);
+				}
+				outList.add(list);
+			}
+			in.close();
+			reader.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println("¶ÁÈ¡³ö´í");
+			System.out.println("è¯»å–å‡ºé”™");
 			e.printStackTrace();
-		} 
-		return outList; 
-	 }
+		}
+		return outList;
+	}
 	/**
-	 * ¶ÁÈ¡²¢Ô¤´¦ÀíÊı¾İ
+	 * è¯»å–å¹¶é¢„å¤„ç†æ•°æ®
 	 * @param fileIn
 	 * @param fileOut
 	 */
 	public void readFile(String fileIn,String fileOut,boolean type){
-		
+
 		ArrayList<ArrayList<String>> outList = new ArrayList<ArrayList<String>>();
 		File file = new File(fileIn);
-	
 
 		if(file.isFile()&&file.exists()){
-		try {
-			InputStreamReader in = new InputStreamReader(new FileInputStream(file),"UTF-8");
-			BufferedReader bf = new BufferedReader(in);
-			File file2 = new File(fileOut);
-			FileWriter writer = new FileWriter(file2);
-			BufferedWriter bWriter = new BufferedWriter(writer);
-			String line = null;
-			while((line = bf.readLine()) != null){
-				if(type && line.contains("?")){ //³ı¸ÉÈÅ
-					continue;
+			try {
+			    // æŠŠæ–‡ä»¶å­—èŠ‚è¾“å…¥æµè½¬æ¢ä¸ºå­—ç¬¦è¾“å…¥æµ
+				InputStreamReader in = new InputStreamReader(new FileInputStream(file),"UTF-8");
+				// è¯»ç¼“å†²åŒº
+				BufferedReader bf = new BufferedReader(in);
+
+				File file2 = new File(fileOut);
+				// æ–‡ä»¶å­—ç¬¦è¾“å‡ºæµ
+				FileWriter writer = new FileWriter(file2);
+				// å†™ç¼“å†²åŒº
+				BufferedWriter bWriter = new BufferedWriter(writer);
+				String line = null;
+				while((line = bf.readLine()) != null){
+					if(type && line.contains("?")){ //é™¤å¹²æ‰°
+						continue;
+					}
+					String tempString = dataConvert(line);
+					bWriter.write(tempString);
+					bWriter.newLine();
 				}
-				String tempString = dataConvert(line);
-				bWriter.write(tempString);
-				bWriter.newLine();
+				bf.close();
+				in.close();
+				bWriter.flush();
+				bWriter.close();
+				writer.close();
+				//System.out.print("è¯»å–æˆåŠŸ") ;
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				System.out.print("è¯»å–å‡ºé”™") ;
+				e.printStackTrace();
 			}
-			bf.close();
-			in.close();
-			bWriter.flush();
-			bWriter.close();
-			writer.close();
-			//System.out.print("¶ÁÈ¡³É¹¦") ;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.print("¶ÁÈ¡³ö´í") ;
-			e.printStackTrace();
-		}
 		}else{
-			System.out.print("ÕÒ²»µ½ÎÄ¼ş") ;
+			System.out.print("æ‰¾ä¸åˆ°æ–‡ä»¶") ;
 		}
 	}
-	
+
 	public String dataConvert(String string ){
 		String temp[] = string.split(", ");
 		StringBuilder sb = new StringBuilder();
 		sb.append(ageConversion(temp[0])+",");
 		sb.append(workclassConversion(temp[1])+",");//workclass
-    	sb.append("");//fnlwgtºöÂÔ
-    	sb.append(educationConversion(temp[3])+",");//education
-    	sb.append("");//education_numºöÂÔ
-    	sb.append(maritalStatusConversion(temp[5])+",");//marital_status
-    	sb.append(occupationConversion(temp[6])+",");//occupation
-    	sb.append(relationshipConversion(temp[7])+",");//relationship
-    	sb.append(raceConversion(temp[8])+",");//race
-    	sb.append(sexConversion(temp[9])+",");//sex
-    	sb.append("");//capital-gain
-    	sb.append("");//capital-loss
-    	sb.append(hoursPerWeekConversion(temp[12])+",");//hours-per-wee£ºÃ¿Ê®¸öĞ¡Ê±Ò»¸öÇø¼ä
-    	sb.append(nativeCountryConversion(temp[13])+",");//nativeCountry£ºÖ»·ÖÎªÁ½ÖÖ£¬ÃÀ¹úºÍÍâ¹ú
-    	sb.append(resultConversion(temp[14]));
+		sb.append("");//fnlwgtå¿½ç•¥
+		sb.append(educationConversion(temp[3])+",");//education
+		sb.append("");//education_numå¿½ç•¥
+		sb.append(maritalStatusConversion(temp[5])+",");//marital_status
+		sb.append(occupationConversion(temp[6])+",");//occupation
+		sb.append(relationshipConversion(temp[7])+",");//relationship
+		sb.append(raceConversion(temp[8])+",");//race
+		sb.append(sexConversion(temp[9])+",");//sex
+		sb.append("");//capital-gain
+		sb.append("");//capital-loss
+		sb.append(hoursPerWeekConversion(temp[12])+",");//hours-per-weeï¼šæ¯åä¸ªå°æ—¶ä¸€ä¸ªåŒºé—´
+		sb.append(nativeCountryConversion(temp[13])+",");//nativeCountryï¼šåªåˆ†ä¸ºä¸¤ç§ï¼Œç¾å›½å’Œå¤–å›½
+		sb.append(resultConversion(temp[14]));
 		return sb.toString();
 	}
-	
+
 	private int ageConversion(String string) {
 		if (!string.contains("?")) {
 			int ageTemp = Integer.parseInt(string);
@@ -155,7 +159,7 @@ public class PreRead {
 		}
 		return 0;
 	}
-	
+
 	private int educationConversion(String string) {
 		if (!string.contains("?")) {
 			if (string.contains("Bachelors")) {
@@ -194,7 +198,7 @@ public class PreRead {
 		}
 		return 0;
 	}
-	
+
 	private int maritalStatusConversion(String string) {
 		if (!string.contains("?")) {
 			if (string.contains("Married-civ-spouse")) {
@@ -213,7 +217,7 @@ public class PreRead {
 				return 7;
 			}
 		}
-		return 0;	
+		return 0;
 	}
 	//occupation: Tech-support, Craft-repair, Other-service, Sales, Exec-managerial,
 	//Prof-specialty, Handlers-cleaners, Machine-op-inspct, Adm-clerical, Farming-fishing,
@@ -270,9 +274,9 @@ public class PreRead {
 				return 6;
 			}
 		}
-		return 0;	
+		return 0;
 	}
-//	race: White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black.
+	//	race: White, Asian-Pac-Islander, Amer-Indian-Eskimo, Other, Black.
 	private int raceConversion(String string) {
 		if (!string.contains("?")) {
 			if (string.contains("White")) {
@@ -287,9 +291,9 @@ public class PreRead {
 				return 5;
 			}
 		}
-		return 0;	
+		return 0;
 	}
-	
+
 	private int sexConversion(String string) {
 		if (!string.contains("?")) {
 			if (string.contains("Female")) {
@@ -298,7 +302,7 @@ public class PreRead {
 				return 2;
 			}
 		}
-		return 0;	
+		return 0;
 	}
 	private int hoursPerWeekConversion(String string) {
 		if (!string.contains("?")) {
@@ -333,7 +337,7 @@ public class PreRead {
 				return 0;
 			}
 		}
-		return 0;	
+		return 0;
 	}
 	private String resultConversion(String string) {
 		if (string.contains(">50K")) {
